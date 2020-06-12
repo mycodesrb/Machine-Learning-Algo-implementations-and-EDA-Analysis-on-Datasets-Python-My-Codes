@@ -28,36 +28,15 @@ df=pd.read_csv("D:/abalone.data", header=None,
               names=['Sex','Length','Diameter','Height','Whole_weight','Shucked_weight','Viscera weight','Shell_weight',
                     'Ring'])
 df.head(2)
-Sex	Length	Diameter	Height	Whole_weight	Shucked_weight	Viscera weight	Shell_weight	Ring
-0	M	0.455	0.365	0.095	0.5140	0.2245	0.1010	0.15	15
-1	M	0.350	0.265	0.090	0.2255	0.0995	0.0485	0.07	7
 
 # For age in years
 df['Age'] = df['Ring']+1.5
 df.head(2)
-Sex	Length	Diameter	Height	Whole_weight	Shucked_weight	Viscera weight	Shell_weight	Ring	Age
-0	M	0.455	0.365	0.095	0.5140	0.2245	0.1010	0.15	15	16.5
-1	M	0.350	0.265	0.090	0.2255	0.0995	0.0485	0.07	7	8.5
 
 # Check the info about dataset
 df.info()
 # We have Sex as an object, rest all as float
 
-<class 'pandas.core.frame.DataFrame'>
-RangeIndex: 4177 entries, 0 to 4176
-Data columns (total 10 columns):
-Sex               4177 non-null object
-Length            4177 non-null float64
-Diameter          4177 non-null float64
-Height            4177 non-null float64
-Whole_weight      4177 non-null float64
-Shucked_weight    4177 non-null float64
-Viscera weight    4177 non-null float64
-Shell_weight      4177 non-null float64
-Ring              4177 non-null int64
-Age               4177 non-null float64
-dtypes: float64(8), int64(1), object(1)
-memory usage: 326.5+ KB
 
 # Check if dataset has any null values
 df.isnull().sum()
@@ -75,27 +54,8 @@ dtype: int64
 
 df.corr()
 # Seems all parameters are well correlated with the output field so we will consider all the parameters in the training
-Length	Diameter	Height	Whole_weight	Shucked_weight	Viscera weight	Shell_weight	Ring	Age
-Length	1.000000	0.986812	0.827554	0.925261	0.897914	0.903018	0.897706	0.556720	0.556720
-Diameter	0.986812	1.000000	0.833684	0.925452	0.893162	0.899724	0.905330	0.574660	0.574660
-Height	0.827554	0.833684	1.000000	0.819221	0.774972	0.798319	0.817338	0.557467	0.557467
-Whole_weight	0.925261	0.925452	0.819221	1.000000	0.969405	0.966375	0.955355	0.540390	0.540390
-Shucked_weight	0.897914	0.893162	0.774972	0.969405	1.000000	0.931961	0.882617	0.420884	0.420884
-Viscera weight	0.903018	0.899724	0.798319	0.966375	0.931961	1.000000	0.907656	0.503819	0.503819
-Shell_weight	0.897706	0.905330	0.817338	0.955355	0.882617	0.907656	1.000000	0.627574	0.627574
-Ring	0.556720	0.574660	0.557467	0.540390	0.420884	0.503819	0.627574	1.000000	1.000000
-Age	0.556720	0.574660	0.557467	0.540390	0.420884	0.503819	0.627574	1.000000	1.000000
 
 df.describe()
-Length	Diameter	Height	Whole_weight	Shucked_weight	Viscera weight	Shell_weight	Ring	Age
-count	4177.000000	4177.000000	4177.000000	4177.000000	4177.000000	4177.000000	4177.000000	4177.000000	4177.000000
-mean	0.523992	0.407881	0.139516	0.828742	0.359367	0.180594	0.238831	9.933684	11.433684
-std	0.120093	0.099240	0.041827	0.490389	0.221963	0.109614	0.139203	3.224169	3.224169
-min	0.075000	0.055000	0.000000	0.002000	0.001000	0.000500	0.001500	1.000000	2.500000
-25%	0.450000	0.350000	0.115000	0.441500	0.186000	0.093500	0.130000	8.000000	9.500000
-50%	0.545000	0.425000	0.140000	0.799500	0.336000	0.171000	0.234000	9.000000	10.500000
-75%	0.615000	0.480000	0.165000	1.153000	0.502000	0.253000	0.329000	11.000000	12.500000
-max	0.815000	0.650000	1.130000	2.825500	1.488000	0.760000	1.005000	29.000000	30.500000
 
 # Let us Analyse the Output field
 sb.distplot(df['Ring'])
@@ -246,4 +206,4 @@ svr_rbf.fit(dfi,dfo)
 svr_rbf.score(dfi,dfo)
 0.9905376480575866
 
-Dependng on scores, algorith can be chosen as per the requirement
+Dependng on scores, algorithm can be chosen as per the requirement
