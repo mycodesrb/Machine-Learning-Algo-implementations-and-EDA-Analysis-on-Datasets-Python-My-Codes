@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
 # In this analysis, I have done the exploratory analysis on Adult Dataset post that I have tested the scores of different 
 # classification algorithms. Dataset can be found on https://archive.ics.uci.edu/ml/datasets.php
 
@@ -32,10 +29,6 @@
 
 #Prediction task is to determine whether a person makes over 50K a year.
 
-
-# In[2]:
-
-
 # load the dataset, remove headers, set the names
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -48,35 +41,15 @@ df=pd.read_csv("D:/2020/Python/ML/Datasets/Classification/adult.data", header=No
                      'capital-gain','capital-loss','hours-per-week','native-country','salary'])
 df.head(2)
 
-
-# In[3]:
-
-
 df.shape
 
-
-# In[4]:
-
-
 df.info()
-
-
-# In[5]:
-
 
 # Cleaning Data
 # We found " ?" in the following 3 attributes 
 df['workclass'].value_counts() 
 
-
-# In[6]:
-
-
 df['native-country'].value_counts()
-
-
-# In[7]:
-
 
 # In all these 3 attributes, replace the "?" with the mode as it makes no major diffrence
 a = df['workclass'].value_counts()
@@ -88,15 +61,7 @@ df['native-country'][df['native-country']==' ?'] = b.sort_values(ascending=False
 c = df['occupation'].value_counts()
 df['occupation'][df['occupation']==' ?'] = c.sort_values(ascending=False).index[0]
 
-
-# In[8]:
-
-
 df.head(2)
-
-
-# In[9]:
-
 
 # EDA and general analysis
 # education-num seems to have a weight built depending upon education, so we can skip that. Let us fous on the numeric
@@ -105,47 +70,24 @@ dfn = df.drop(['education-num','salary'], axis=1)
 dfn.describe()
 
 
-# In[10]:
-
-
 # From the above tbale, we see age spreads from 17 to 90. Difference between 1st quartile and the minimum is not huge but
 # difference between 3rd quartile and max is huge. Also it shows that 75% age lies around 48 but after 48, age is dispersed 
 # a lot. It shows that the curve is skewed right as maximum data lies in the left. lets visualize age as follows.
 sb.distplot(df['age']) #shows right skewed curve
 
-
-# In[11]:
-
-
 plt.hist(df['age'])
 # Right skewed, very less population after 70 which is quite obvious as in those years of age, very less people work.
 # Mostly, from age 19 to age 45, people are engagged in working.
 
-
-# In[12]:
-
-
 # fnlwgt is sample weight, it has a huge difference between median and max value, it is also right skewed.
 sb.distplot(df['fnlwgt'])
-
-
-# In[13]:
-
 
 sb.distplot(df['capital-gain']) # Capital gain shows that maximum values are 0, very less values are set to high values 
 # which shows that gain is either mostly 0 or very large till 99k hence the stanard deviation is very large
 
-
-# In[14]:
-
-
 # capital-loss is just same as capital-gai, maximum concentrated on 0, has mean greater than median(0), which shows its a right 
 # skewed curve
 sb.distplot(df['capital-loss'])
-
-
-# In[15]:
-
 
 # Lets check relation between capitalgain vs capital loss
 plt.scatter(df['capital-gain'],df['capital-loss'])
@@ -154,95 +96,47 @@ plt.ylabel('capital-loss')
 plt.show()
 # Obviously it shows, for high gain, loss is from 0 to high and vice versa. Loss and gain both can be 0. Mostly it is 0 or high
 
-
-# In[16]:
-
-
 # hours-per-week: 75% people seems to work for 40-45 hours. It varies from an hour to 99 hours per week which shows large
 # variation. Very less people work for up to 99 hours/week. Quartiles shows that the distribution is mostly normal. This
 # attribute can be further more analysed.
 sb.distplot(df['hours-per-week'])
 
-
-# In[17]:
-
-
 plt.hist(df['hours-per-week'])
 # Maximum people work for 35 to 40 hours, very less people work for more than 80 hours which is not usual. Most population works
 # upto 45 hours-around 75%.
 
-
-# In[18]:
-
-
 # let us see the object attributes
 df.describe(include=['O'])
-
-
-# In[19]:
-
 
 # Majority of workclass if from Private sector. Race is biased more towards white race, maximum males are involves in
 # the earning process. The maximum data seems biased to US as majority of data belongs to US, rest is divided in 41 other
 # native-countries.
-
-
-# In[20]:
-
 
 x = sb.countplot(df['education'])
 x.set_xticklabels(df['education'].unique(), rotation=90) # you have to be specific here as df.value_counts() give the sorted 
 plt.show() # descending arder and countplot plots simply by the sequence, not by sorted order so x-axs & y-axis values may
            # mismatch
 
-
-# In[21]:
-
-
 # Above plot shows there are 16 categories of education out of which, maximum are HS-Grads who are engagged in earning, followed
 # by people who belong to Some-College. Least working population are from Preschool which is quite obvious. 
-
-
-# In[22]:
-
 
 y = sb.countplot(df['marital-status'])
 y.set_xticklabels(df['marital-status'].unique(), rotation=90)
 plt.show()
 
-
-# In[23]:
-
-
 # Above plot shows maximum Married civil spouses are engagged in earning followed by Never-Married ones. These two categories
 # dominates in all 7 categories. Least are from Armed forces spouses
-
-
-# In[24]:
-
 
 y = sb.countplot(df['occupation'])
 y.set_xticklabels(df['occupation'].unique(), rotation=90)
 plt.show()
 
-
-# In[25]:
-
-
 # Above plot shows 14 profession out of which maximum people engagged in earning are from Prof-Speciality group. Least are
 # from Armed forces. 
-
-
-# In[26]:
-
 
 y = sb.countplot(df['relationship'])
 y.set_xticklabels(df['relationship'].unique(), rotation=90)
 plt.show()
-
-
-# In[27]:
-
 
 # Above plot shows Husbands have maximum engaggement in earning followed by Not-in-Family category out of all 6 categories
 
@@ -254,88 +148,40 @@ y = sb.countplot(df['race'])
 y.set_xticklabels(df['race'].unique(), rotation=90)
 plt.show()
 
-
-# In[29]:
-
-
 # Above plot shows that mostly White people are engagged in working. Plot shows largely biased data towards white people
 # as the second highest working crowd is Black and there is huge difference between these two categories.
-
-
-# In[30]:
-
 
 y = sb.countplot(df['sex'])
 y.set_xticklabels(df['sex'].unique(), rotation=90)
 plt.show()
 
-
-# In[31]:
-
-
 # Above plot shows that mostly Males are engagged in earning (around 22000) as compared to Females (below 11000).
-
-
-# In[32]:
-
 
 y = sb.countplot(df['native-country'])
 y.set_xticklabels(df['native-country'].unique(), rotation=90)
 plt.show()
 
-
-# In[33]:
-
-
 # Above plot shows the data is largely biased for US as majority of population are from US which is quite high (around 29000)
 # as compared to other countries which are below 1000
-
-
-# In[34]:
-
 
 y = sb.countplot(df['salary'])
 y.set_xticklabels(df['salary'].unique(), rotation=90)
 plt.show()
 
-
-# In[35]:
-
-
 # above plot shows that majority (around 25000 people) are earning <==50k as compared to people which are earning >50k (around
 # 8k)
 
-
-# In[36]:
-
-
 df['salary'] = df['salary'].replace({' <=50K':0,' >50K':1})
 
-
-# In[37]:
-
-
 # Lets go for some Bivariate analysis
-
-
-# In[38]:
-
 
 #Age
 sb.boxplot(data=df, x='salary',y='age')
 plt.show()
 
-
-# In[39]:
-
-
 # Above plot shows that there are outliers in both categories. Median of population <=50K is less than that of >50K.
 # Mean of range <=50K is spread in 50% of the population, which is quite more than in rangeof >50K
 df[['salary','age']].groupby(['salary'], as_index=False).mean() # We can see the mean values and justify the above fact
-
-
-# In[40]:
-
 
 # Let us try to test the above fact by a hypothesis test
 # We want to test whether the mean of age of two samples (the two ranges of salary) are same of there is a difference between 
@@ -345,10 +191,6 @@ df[['salary','age']].groupby(['salary'], as_index=False).mean() # We can see the
 
 # H0: the means are significant with no difference, hence no association with salary (Independence)
 # H1: the means are non significant, have difference, hence has an association with salary (Dependence)
-
-
-# In[41]:
-
 
 import random
 salary0 = df[df['salary']==0]['age'].tolist() # tolist is done because random.sample needs a sequence/set or list to fetch data 
@@ -362,31 +204,15 @@ ttest, pval = ttest_ind(salary1, salary0, equal_var = False)
 
 print(ttest, pval)
 
-
-# In[42]:
-
-
 # I aboe case, pval<0.05 => We reject the null hypothesis and consider that there is a difference between the means of two 
 # samples w.r.t salary, hence age is associated with salary
-
-
-# In[43]:
-
 
 # hours-per-week: 
 sb.boxplot(data=df, x='salary', y='hours-per-week')
 plt.show()
 
-
-# In[44]:
-
-
 # Above plot shows that mean of people who earns >50k is more than who earns <=50k. Also, those who earns >50k spends approx
 # 44-45 hours, more as compared to those who earns <=50k (approx < 40)
-
-
-# In[45]:
-
 
 # Lets try t test on hours-per-week w.r.t salary
 
@@ -398,30 +224,14 @@ hpw1 = random.sample(hpw1, 100)
 stats, pval = ttest_ind(hpw1, hpw0)
 print(stats, pval)
 
-
-# In[46]:
-
-
 # pval < 0.05, we reject null hypothesis, which means that hours-per-week is definetly associated with salary and the means of
 # two samples (salary:0,1) have a difference w.r.t salary
-
-
-# In[47]:
-
 
 # fnlwgt: 
 sb.boxplot(data=df, x='salary', y='fnlwgt')
 plt.show()
 
-
-# In[48]:
-
-
 # Mean seems equal for both categories, leta check it with ttest
-
-
-# In[49]:
-
 
 # t test on fnlwgthours-per-week w.r.t salary
 
@@ -433,30 +243,14 @@ fnl1 = random.sample(fnl1, 100)
 stats, pval = ttest_ind(fnl1, fnl0)
 print(stats, pval)
 
-
-# In[50]:
-
-
 # Pvalue > 0.05, we accept null hypothesis, no difference in means of fnlwgt for categories of salary, no association with
 # salary
-
-
-# In[51]:
-
 
 # capital-gain
 sb.boxplot(data=df, x='salary', y='capital-gain')
 plt.show()
 
-
-# In[52]:
-
-
 # Plot show there are outliers, and most of the values are concentrated on 0, lets try to find the association with salary
-
-
-# In[53]:
-
 
 # t test on capital-gain w.r.t salary
 
@@ -468,29 +262,13 @@ cpt1 = random.sample(cpt1, 100)
 stats, pval = ttest_ind(cpt1, cpt0)
 print(stats, pval)
 
-
-# In[54]:
-
-
 # pval<0.05, hence we reject null hypothesis, there is difference between means of capital-loss for samples of salary
-
-
-# In[55]:
-
 
 # capital-loss
 sb.boxplot(data=df, x='salary', y='capital-loss')
 plt.show()
 
-
-# In[56]:
-
-
 # Plot show there are outliers, and most of the values are concentrated on 0, lets try to find the association with salary
-
-
-# In[57]:
-
 
 # t test on capital-loss w.r.t salary
 
@@ -502,31 +280,15 @@ cpt1 = random.sample(cpt1, 100)
 stats, pval = ttest_ind(cpt1, cpt0)
 print(stats, pval)
 
-
-# In[58]:
-
-
 # pval>0.05 , hence we accept null hypothesis, there is no difference between means of capital-loss for samples of salary
-
-
-# In[59]:
-
 
 # workclass
 x = sb.countplot(df['workclass'], hue=df['salary'])
 x.set_xticklabels(df['workclass'].unique(), rotation=90)
 plt.show()
 
-
-# In[60]:
-
-
 # above plot shows highest earning workclass is Private where maximum people earn <=50K (group 0). Ony self employee inc has
 # more number of people who earn>50K as compared to those who earn <=50k
-
-
-# In[61]:
-
 
 # let us try to find its association with salary by Chi Sq. Test
 # Ho: Significant, There is no relation between workclass and salary
@@ -538,24 +300,12 @@ from scipy.stats import chi2_contingency
 stat, pval, dof, exp = chi2_contingency(ctb)
 print(stat, pval)
 
-
-# In[62]:
-
-
 # as pvalue > 0.05, we accept null hypothesis and conclude that workclass and salary are not dependent
-
-
-# In[63]:
-
 
 # education: salary
 a = sb.countplot(data=df, x='education',hue='salary')
 a.set_xticklabels(df['education'].unique(), rotation=90)
 plt.show()
-
-
-# In[64]:
-
 
 # Maximum HS-grad people are engagged in earning out of which most people earn <=50k which is quite high as compared to people 
 # who earn >50k, followed by some-college. Doctorate and Prof-school people are the only education sectors where number of 
@@ -568,24 +318,12 @@ ctb = pd.crosstab(df['education'], df['salary'], margins=False)
 stat, pval, dof, exp = chi2_contingency(ctb)
 print(stat, pval)
 
-
-# In[65]:
-
-
 # as pvalue < 0.05, we reject null hypothesis and conclude that edcucation and salary ARE dependent
-
-
-# In[66]:
-
 
 # marital-status : salary
 a = sb.countplot(data=df, x='marital-status',hue='salary')
 a.set_xticklabels(df['marital-status'].unique(), rotation=90)
 plt.show()
-
-
-# In[67]:
-
 
 # Married-civ-spouse has the highest percentage of falling under the income group 1(>50k).
 # Only few (around 2%) of the people of "Never-married" earn more than 50k. Married-spouse-absent and Married-AF-spouse has
@@ -596,24 +334,12 @@ ctb = pd.crosstab(df['marital-status'].sample(frac=0.002, random_state=1, replac
 stat, pval, dof, exp = chi2_contingency(ctb)
 print(stat, pval, dof)
 
-
-# In[68]:
-
-
 # as pvalue < 0.05, we reject null hypothesis and conclude that marital-status and salary ARE dependent
-
-
-# In[69]:
-
 
 # occupation
 a = sb.countplot(data=df, x='occupation',hue='salary')
 a.set_xticklabels(df['occupation'].unique(), rotation=90)
 plt.show()
-
-
-# In[70]:
-
 
 # Above plot shows that all the groups have more people earning<=50k as compared to those who earn <50k. Prof-Speciality show
 # maximum crowd as compared to all others. No group have more people who earn>50k than those wo earn <=50k. Other services 
@@ -623,24 +349,12 @@ ctb = pd.crosstab(df['occupation'].sample(frac=0.002, random_state=1, replace=Tr
 stat, pval, dof, exp = chi2_contingency(ctb)
 print(stat, pval, dof)
 
-
-# In[71]:
-
-
 # pvale > 0.05, we accept null hypothesis, there is no relation between occupation and salary.
-
-
-# In[72]:
-
 
 # relationship
 a = sb.countplot(data=df, x='relationship',hue='salary')
 a.set_xticklabels(df['relationship'].unique(), rotation=90)
 plt.show()
-
-
-# In[73]:
-
 
 # Husband category has maximum crowd of all froups. HUsband and wif groups have less difference between the salary 
 # groups 0 and 1. In all groups, more people there in group who earn <=50k as compared to those who earn >50k (very big 
@@ -651,24 +365,12 @@ ctb = pd.crosstab(df['relationship'].sample(frac=0.002, random_state=1, replace=
 stat, pval, dof, exp = chi2_contingency(ctb)
 print(stat, pval, dof)
 
-
-# In[74]:
-
-
 # pvalue<0.05 so we reject null hypothesis, both attributes are dependent
-
-
-# In[75]:
-
 
 # race
 a = sb.countplot(data=df, x='race',hue='salary')
 a.set_xticklabels(df['race'].unique(), rotation=90)
 plt.show()
-
-
-# In[76]:
-
 
 # Most crowd is present in white group of overall groups. Every group has people earning <=50k are more as compared to those
 # who earn >50k
@@ -678,24 +380,12 @@ ctb = pd.crosstab(df['race'].sample(frac=0.002, random_state=1, replace=True),
 stat, pval, dof, exp = chi2_contingency(ctb)
 print(stat, pval, dof)
 
-
-# In[77]:
-
-
 # pvalue > 0.05, accept H0, there is no dependency in race and salary
-
-
-# In[78]:
-
 
 # sex
 a = sb.countplot(data=df, x='sex',hue='salary')
 a.set_xticklabels(df['sex'].unique(), rotation=90)
 plt.show()
-
-
-# In[79]:
-
 
 # Females earning >50k as compared to males are not present. People earning <=50k are greater than those earning >50k.
 ctb = pd.crosstab(df['sex'].sample(frac=0.003, random_state=1, replace=True),
@@ -705,13 +395,7 @@ stat, pval, dof, exp = chi2_contingency(ctb)
 print(stat, pval, dof)
 
 
-# In[80]:
-
-
 # pvalue <0.05, we reject the null hypothesis, there is dependency between sex and salary
-
-
-# In[81]:
 
 
 # native-country: As seen earlier, it is largely biased to US country
@@ -721,58 +405,26 @@ ctb = pd.crosstab(df['native-country'].sample(frac=0.003, random_state=1, replac
 stat, pval, dof, exp = chi2_contingency(ctb)
 print(stat, pval, dof)
 
-
-# In[82]:
-
-
 # pval>0.05, we accept null hypothesis, there is no dependency between native-country and salary
-
-
-# In[83]:
-
 
 # Let us compare relationship between "salary", "hours-per-week", "sex"
 sb.boxplot(data=df, x='salary', y='hours-per-week', hue='sex')
 plt.show()
 
-
-# In[84]:
-
-
 # Above plot shows, for salary group earning >50k, Males have more flexible working hours as compared to females
 # For group earning <=50k, females have more flexible hours
 
-
-# In[85]:
-
-
 # In this way we can have more analysis depending upon the need. Conclusions can be extracted from individual analysis.
-
-
-# In[86]:
-
 
 # Let us build a prediction model
 from sklearn.tree import DecisionTreeClassifier
 dtc = DecisionTreeClassifier()
 
-
-# In[90]:
-
-
 df.head(2)
-
-
-# In[89]:
-
 
 df1 = df
 from sklearn.preprocessing import LabelEncoder
 le = LabelEncoder()
-
-
-# In[93]:
-
 
 # Encode the required attributes
 df1['workclass'] = le.fit_transform(df1['workclass'])
@@ -785,26 +437,14 @@ df1['sex'] = df1['sex'].replace({' Male':0, ' Female':1})
 df1['native-country'] = le.fit_transform(df1['native-country'])
 df1.head()
 
-
-# In[97]:
-
-
 # prepare input and output
 dfi = df1.iloc[:,:-1]
 dfo = df1['salary']
-
-
-# In[99]:
-
 
 # train and get the score
 dtc.fit(dfi,dfo)
 dtc.score(dfi,dfo)
 # This is giving a good score
-
-
-# In[101]:
-
 
 # Lets do the same with train and test splitting
 from sklearn.model_selection import train_test_split
@@ -812,21 +452,9 @@ from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(dfi,dfo, test_size=0.30)
 print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
 
-
-# In[102]:
-
-
 dtc.fit(X_train, y_train) # fit data
 
-
-# In[103]:
-
-
 dtc.score(X_train, y_train) #get score
-
-
-# In[111]:
-
 
 # predict
 y_pred = dtc.predict(X_test)
@@ -834,31 +462,15 @@ y_pred = dtc.predict(X_test)
 dfp = pd.DataFrame({'Salary_Actual':y_test, 'Salary_Pred':y_pred})
 dfp.head(2)
 
-
-# In[121]:
-
-
 # Mannual check
 dfp.groupby(['Salary_Actual', 'Salary_Pred'])['Salary_Pred'].count()
 
-
-# In[123]:
-
-
 (6503+1458)/dfp.shape[0] # Actual Score: Can be considered a good score
-
-
-# In[114]:
-
 
 # Check cofusion matrix, accuracy score and classification report
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
-
-
-# In[126]:
-
 
 print("Confusion Matrix :")
 print(confusion_matrix(dfp['Salary_Actual'], dfp['Salary_Pred']))
@@ -867,8 +479,20 @@ print("Accuracy Score :", accuracy_score(dfp['Salary_Actual'], dfp['Salary_Pred'
 print('============================================================')
 print(classification_report(dfp['Salary_Actual'], dfp['Salary_Pred']))
 
+Confusion Matrix :
+[[6503  945]
+ [ 863 1458]]
+============================================================
+Accuracy Score : 0.8149247620022521
+============================================================
+              precision    recall  f1-score   support
 
-# In[ ]:
+           0       0.88      0.87      0.88      7448
+           1       0.61      0.63      0.62      2321
+
+    accuracy                           0.81      9769
+   macro avg       0.74      0.75      0.75      9769
+weighted avg       0.82      0.81      0.82      9769
 
 
 # Like wise we can test the scores for different classification algorithms and depending on the best scores and requirement,we
